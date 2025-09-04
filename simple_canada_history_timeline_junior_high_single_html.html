@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Canada History – Super Simple Interactive Timeline</title>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --card: #121826;
+      --muted: #2a3344;
+      --text: #e6edf6;
+      --accent: #4aa8ff;
+      --accent-2: #90d1ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% -10%, #182234, var(--bg));
+      color: var(--text);
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.25rem; margin: 0 0 8px; }
+    p.sub { margin: 0 0 16px; color: #b2bed1; font-size: .95rem; }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid #1e2737; border-radius: 14px; padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative; overflow-x: auto; overflow-y: hidden; padding: 20px 8px 30px;
+      scrollbar-color: var(--muted) transparent; scrollbar-width: thin;
+    }
+    .track { height: 4px; background: linear-gradient(90deg, var(--muted), #21304b); border-radius: 999px; position: relative; }
+
+    .events { list-style: none; display: flex; gap: 56px; margin: 0; padding: 0; align-items: center; position: relative; top: -10px; }
+    .event { position: relative; flex: 0 0 auto; text-align: center; }
+    .event .year { margin-top: 10px; font-size: .9rem; color: #bcd0ea; }
+
+    .dot {
+      width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--accent);
+      background: #0b111e; display: inline-block; cursor: pointer;
+      box-shadow: 0 0 0 2px rgba(74,168,255,.15);
+      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+    }
+    .event.active .dot { background: var(--accent); transform: scale(1.2); box-shadow: 0 0 0 6px rgba(74,168,255,.12); }
+    .event:hover .dot { transform: scale(1.08); }
+
+    .details { margin-top: 16px; padding: 14px 16px; border: 1px solid #1f2940; border-radius: 12px; background: #0e1522; }
+    .details h2 { font-size: 1.05rem; margin: 0 0 4px; }
+    .details .year-tag { font: 600 .8rem/1.4 system-ui, sans-serif; color: #a4c7ff; opacity: .9; }
+    .details p { margin: 8px 0 0; color: #d6dfec; }
+
+    .help { display: flex; gap: 10px; align-items: center; font-size: .9rem; color: #a9b7cd; margin-top: 10px; }
+    .kbd { border: 1px solid #2a3344; background: #0f1624; padding: 2px 6px; border-radius: 6px; font-size: .8rem; }
+
+    /* Small screens */
+    @media (max-width: 640px) {
+      .events { gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Canada History — Junior High (AB)</h1>
+    <p class="sub">Click the dots to see a quick blurb. This is a super‑simple, single‑file HTML—great for testing.</p>
+
+    <div class="card">
+      <div class="timeline" aria-label="Timeline" id="timeline" tabindex="0">
+        <div class="track"></div>
+        <ul class="events" role="list">
+          <!-- Keep it tiny & simple: 12 milestones -->
+          <li class="event" data-title="First Peoples" data-year="Before 1500" data-text="Indigenous Peoples have lived on these lands since time immemorial, with diverse Nations, languages, and knowledge systems.">
+            <button class="dot" aria-label="Before 1500 — First Peoples" type="button"></button>
+            <div class="year">≤ 1500</div>
+          </li>
+          <li class="event" data-title="Royal Proclamation" data-year="1763" data-text="The Royal Proclamation recognized Indigenous title to the land and set rules for settlement and treaties.">
+            <button class="dot" aria-label="1763 — Royal Proclamation" type="button"></button>
+            <div class="year">1763</div>
+          </li>
+          <li class="event" data-title="Confederation" data-year="1867" data-text="The Dominion of Canada was formed by the British North America Act, uniting Ontario, Québec, Nova Scotia, and New Brunswick.">
+            <button class="dot" aria-label="1867 — Confederation" type="button"></button>
+            <div class="year">1867</div>
+          </li>
+          <li class="event" data-title="Manitoba Act &amp; Métis Resistance" data-year="1870" data-text="Following the Red River Resistance led by Louis Riel, Manitoba entered Confederation and Métis land rights were promised in the Manitoba Act.">
+            <button class="dot" aria-label="1870 — Manitoba Act" type="button"></button>
+            <div class="year">1870</div>
+          </li>
+          <li class="event" data-title="British Columbia Joins" data-year="1871" data-text="British Columbia joined Canada with a promise of a transcontinental railway.">
+            <button class="dot" aria-label="1871 — BC joins" type="button"></button>
+            <div class="year">1871</div>
+          </li>
+          <li class="event" data-title="Alberta &amp; Saskatchewan" data-year="1905" data-text="The provinces of Alberta and Saskatchewan were created from the Northwest Territories.">
+            <button class="dot" aria-label="1905 — Alberta and Saskatchewan created" type="button"></button>
+            <div class="year">1905</div>
+          </li>
+          <li class="event" data-title="World War I" data-year="1914–1918" data-text="Over 600,000 Canadians served. The war had major social and political impacts, including conscription debates.">
+            <button class="dot" aria-label="1914 to 1918 — World War One" type="button"></button>
+            <div class="year">1914–18</div>
+          </li>
+          <li class="event" data-title="Statute of Westminster" data-year="1931" data-text="Gave Canada full control over its laws (legislative independence) except for constitutional amendments at the time.">
+            <button class="dot" aria-label="1931 — Statute of Westminster" type="button"></button>
+            <div class="year">1931</div>
+          </li>
+          <li class="event" data-title="World War II" data-year="1939–1945" data-text="Canada declared war in 1939. The war transformed the economy and society; many served at home and overseas.">
+            <button class="dot" aria-label="1939 to 1945 — World War Two" type="button"></button>
+            <div class="year">1939–45</div>
+          </li>
+          <li class="event" data-title="Official Languages Act" data-year="1969" data-text="Recognized English and French as Canada’s official languages in federal institutions.">
+            <button class="dot" aria-label="1969 — Official Languages Act" type="button"></button>
+            <div class="year">1969</div>
+          </li>
+          <li class="event" data-title="Constitution &amp; Charter" data-year="1982" data-text="Canada patriated its Constitution and adopted the Canadian Charter of Rights and Freedoms.">
+            <button class="dot" aria-label="1982 — Constitution & Charter" type="button"></button>
+            <div class="year">1982</div>
+          </li>
+          <li class="event" data-title="Nunavut" data-year="1999" data-text="Nunavut was created as a new territory through a land claims agreement, with Iqaluit as its capital.">
+            <button class="dot" aria-label="1999 — Nunavut created" type="button"></button>
+            <div class="year">1999</div>
+          </li>
+          <li class="event" data-title="TRC Calls to Action" data-year="2015" data-text="The Truth and Reconciliation Commission released 94 Calls to Action regarding residential schools and reconciliation.">
+            <button class="dot" aria-label="2015 — TRC Calls to Action" type="button"></button>
+            <div class="year">2015</div>
+          </li>
+          <li class="event" data-title="National Day for Truth and Reconciliation" data-year="2021" data-text="September 30 became a federal day to reflect on the legacy of residential schools and honour Survivors.">
+            <button class="dot" aria-label="2021 — National Day for Truth and Reconciliation" type="button"></button>
+            <div class="year">2021</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="details" id="details" aria-live="polite">
+        <div class="year-tag" id="d-year">—</div>
+        <h2 id="d-title">Pick a point on the timeline</h2>
+        <p id="d-text">Tip: you can scroll the timeline horizontally. No libraries, no frameworks—just HTML/CSS/JS.</p>
+      </div>
+
+      <div class="help">
+        <span class="kbd">Click</span> a dot • <span class="kbd">Tab</span> to focus timeline then use <span class="kbd">←</span> <span class="kbd">→</span> to move • <span class="kbd">Enter</span> to select
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple JS: no globals like `event` (to avoid ReferenceError in some browsers)
+    (function () {
+      const timeline = document.getElementById('timeline');
+      const events = Array.from(document.querySelectorAll('.event'));
+      const dots = Array.from(document.querySelectorAll('.event .dot'));
+      const dYear = document.getElementById('d-year');
+      const dTitle = document.getElementById('d-title');
+      const dText = document.getElementById('d-text');
+
+      function activate(index, scrollIntoView = true) {
+        events.forEach(el => el.classList.remove('active'));
+        const li = events[index];
+        if (!li) return;
+        li.classList.add('active');
+        dYear.textContent = li.dataset.year;
+        dTitle.textContent = li.dataset.title;
+        dText.textContent = li.dataset.text;
+        if (scrollIntoView) {
+          li.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        }
+      }
+
+      // Click handling
+      dots.forEach((btn, idx) => {
+        btn.addEventListener('click', function (e) {
+          activate(idx);
+        });
+      });
+
+      // Keyboard navigation when timeline is focused
+      let focusIndex = 0;
+      timeline.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { focusIndex = Math.min(focusIndex + 1, events.length - 1); activate(focusIndex); e.preventDefault(); }
+        if (e.key === 'ArrowLeft') { focusIndex = Math.max(focusIndex - 1, 0); activate(focusIndex); e.preventDefault(); }
+        if (e.key === 'Home') { focusIndex = 0; activate(focusIndex); e.preventDefault(); }
+        if (e.key === 'End') { focusIndex = events.length - 1; activate(focusIndex); e.preventDefault(); }
+        if (e.key === 'Enter' || e.key === ' ') { activate(focusIndex); e.preventDefault(); }
+      });
+
+      // Start with a sensible default
+      activate(2, false); // Confederation by default
+    })();
+  </script>
+</body>
+</html>
